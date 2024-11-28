@@ -1,22 +1,16 @@
 <?php
-session_start();
-
-// Verifica se o usuário está logado; caso contrário, redireciona para a página de login
-if (!isset($_SESSION['user_logged_in']) || $_SESSION['user_logged_in'] !== true) {
-    header("Location: login.php");
-    exit();
-}
-
 include 'usuarios_controller.php';
+include 'navbar.php'; 
 
-// Pega todos os usuários para preencher os dados da tabela
+
+//Pega todos os usuários para preencher os dados da tabela
 $users = getUsers();
 
-// Variável que guarda o ID do usuário que será editado
+//Variável que guarda o ID do usuário que será editado
 $userToEdit = null;
 
 // Verifica se existe o parâmetro edit pelo método GET
-// e se há um ID para edição de usuário
+// e sé há um ID para edição de usuário
 if (isset($_GET['edit'])) {
     $userToEdit = getUser($_GET['edit']);
 }
@@ -27,69 +21,64 @@ if (isset($_GET['edit'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>    
     <title>CRUD de Usuários</title>
-    <!-- Inclui o CSS do Bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script>
-        function clearForm() {
-            document.getElementById('nome').value = '';
-            document.getElementById('telefone').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('senha').value = '';
-            document.getElementById('id').value = '';
-        }
+       
     </script>
 </head>
 <body>
+    <!-- Insere o JavaScript -->
+    <script src="java/main.js"></script>
 
-<header class="bg-success text-white text-center py-4 mb-4 shadow">
-    <h1>Gerenciamento de Usuários</h1>
-</header>
+    <h2 class="ml-5 mt-4 mb-3">Cadastro de Usuários</h2>
+        <div class="container mx-5">
+            <form method="POST" action="">
+                <div class="container-fluid">
+                    <input type="hidden" id="id" name="id" value="<?php echo $userToEdit['id'] ?? ''; ?>">
+                </div>
 
-<main class="container">
-    <h2 class="text-center my-4">Cadastro de Usuários</h2>
-    <form method="POST" action="" class="bg-light p-4 rounded shadow-sm">
-        <input type="hidden" id="id" name="id" value="<?php echo $userToEdit['id'] ?? ''; ?>">
-        
-        <div class="form-group">
-            <label for="nome">Nome:</label>
-            <input type="text" class="form-control" id="nome" name="nome" value="<?php echo $userToEdit['nome'] ?? ''; ?>" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="telefone">Telefone:</label>
-            <input type="text" class="form-control" id="telefone" name="telefone" value="<?php echo $userToEdit['telefone'] ?? ''; ?>" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo $userToEdit['email'] ?? ''; ?>" required>
-        </div>
-        
-        <div class="form-group">
-            <label for="senha">Senha:</label>
-            <input type="password" class="form-control" id="senha" name="senha" required>
-        </div>
-        
-        <div class="form-group">
-            <button type="submit" name="save" class="btn btn-success">Salvar</button>
-            <button type="submit" name="update" class="btn btn-primary">Atualizar</button>
-            <button type="button" onclick="clearForm()" class="btn btn-secondary">Novo</button>
-        </div>
-    </form>
+                <div class="container-fluid">
+                    <label for="nome" class="form-label">Nome:</label>
+                    <input type="text" id="nome" name="nome" class="form-control" value="<?php echo $userToEdit['nome'] ?? ''; ?>" class="rounded border border-dark" required><br><br>
+                </div>
 
-    <h2 class="text-center my-4">Usuários Cadastrados</h2>
-    <table class="table table-bordered table-striped shadow-sm">
-        <thead class="thead-dark">
+                <div class="container-fluid">
+                    <label for="telefone" class="form-label">Telefone:</label>
+                    <input type="text" id="telefone" name="telefone" class="form-control" value="<?php echo $userToEdit['telefone'] ?? ''; ?>" class="rounded border border-dark" required><br><br>
+                </div>
+
+                <div class="container-fluid">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" id="email" name="email" class="form-control" value="<?php echo $userToEdit['email'] ?? ''; ?>" class="rounded border border-dark" required><br><br>
+                </div>
+
+                <div class="container-fluid">
+                    <label for="senha" class="form-label">Senha:</label>
+                    <input type="password" id="senha" name="senha" class="form-control" class="rounded border border-dark" required><br><br>
+                </div>
+
+                <div class="container-fluid">
+                    <button type="submit" class = "btn btn-info ml-1" name="save">Salvar</button>
+                    <button type="submit" class = "btn btn-info" name="update">Atualizar</button>
+                    <button type="button" class = "btn btn-info" onclick="clearForm()">Novo</button>
+                </div>
+            </form>
+        </div>
+    <h2 class="ml-5 mt-4">Usuários Cadastrados</h2>
+    
+    <div class="container-fluid px-5">
+        <table class="table table-info table-hover my-4">
             <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Telefone</th>
-                <th>Email</th>
-                <th>Ações</th>
+                <th class="table-primary">ID</th>
+                <th class="table-primary">Nome</th>
+                <th class="table-primary">Telefone</th>
+                <th class="table-primary">Email</th>
+                <th class="table-primary">Ações</th>
             </tr>
-        </thead>
-        <tbody>
+            <!--Faz um loop FOR no resultset de usuários e preenche a tabela-->
             <?php foreach ($users as $user): ?>
                 <tr>
                     <td><?php echo $user['id']; ?></td>
@@ -97,23 +86,16 @@ if (isset($_GET['edit'])) {
                     <td><?php echo $user['telefone']; ?></td>
                     <td><?php echo $user['email']; ?></td>
                     <td>
-                        <a href="?edit=<?php echo $user['id']; ?>" class="btn btn-warning btn-sm">Editar</a>
-                        <a href="?delete=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
+                        <a href="?edit=<?php echo $user['id']; ?>">Editar</a>
+                        <a href="?delete=<?php echo $user['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir?');">Excluir</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
-        </tbody>
-    </table>
-</main>
-
-<footer class="bg-success text-white text-center py-3 mt-4">
-    <p>CRUD de Usuários &copy; <?php echo date("Y"); ?> - Todos os direitos reservados</p>
-</footer>
-
-<!-- Inclui o JavaScript do Bootstrap e dependências -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+        </table>
+    </div>
+    
+   <?php
+   include 'footer2.php';
+   ?>
 </body>
 </html>

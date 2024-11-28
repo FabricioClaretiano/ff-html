@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost"; // ou o endereço do seu servidor
 $username = "root"; // padrão do XAMPP
-$password = ""; // senha em branco
+$password = "Root123"; // senha em branco
 $dbname = "sistema"; // substitua pelo nome do seu banco de dados
 
 // Cria a conexão
